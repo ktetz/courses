@@ -1,0 +1,2 @@
+# courses
+training courses
