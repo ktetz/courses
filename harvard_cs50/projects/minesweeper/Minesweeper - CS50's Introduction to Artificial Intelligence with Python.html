@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en-us" class="wf-ptsans-n4-active wf-ptsans-n7-active wf-active"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width"><meta property="og:description" content="This course explores the concepts and algorithms at the foundation of modern artificial intelligence, diving into the ideas that give rise to technologies like game-playing engines, handwriting recognition, and machine translation. Through hands-on projects, students gain exposure to the theory behind graph search algorithms, classification, optimization, machine learning, large language models, and other topics in artificial intelligence as they incorporate them into their own Python programs. By course's end, students emerge with experience in libraries for machine learning as well as knowledge of artificial intelligence principles that enable them to design intelligent systems of their own.">
+
+        <meta property="og:image" content="https://img.youtube.com/vi/qK46ET1xk2A/maxresdefault.jpg"><meta property="og:title" content="Minesweeper - CS50's Introduction to Artificial Intelligence with Python">
+
+        <link href="https://cs50.harvard.edu/ai/2024/favicon.ico?1717899506" rel="icon">
+
+        <!-- https://fonts.google.com/specimen/PT+Sans?query=PT+Sans&selection.family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700 -->
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/webfont.js"></script>
+
+        <!-- https://getbootstrap.com/docs/ -->
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/jquery.min.js"></script>
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/bootstrap.bundle.min.js"></script>
+
+        <!-- https://bootstrap-table.com/docs/getting-started/introduction/ -->
+        <link href="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/bootstrap-table.min.css" rel="stylesheet">
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/bootstrap-table.min.js"></script>
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/bootstrap-table-mobile.min.js"></script>
+
+        <!-- https://fontawesome.com/how-to-use/on-the-web/referencing-icons/basic-use -->
+        
+        <link crossorigin="anonymous" href="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/a6e66aa089.css" rel="stylesheet">
+        
+
+        <!-- https://moment.github.io/luxon/ -->
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/luxon.min.js"></script>
+
+        <!-- http://docs.mathjax.org/ -->
+        <!-- http://docs.mathjax.org/en/latest/options/output/chtml.html?highlight=displayAlign#the-configuration-block -->
+        <script>
+            MathJax = {
+               chtml: {
+                    displayAlign: "left"
+                }
+            };
+        </script>
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/tex-chtml.js"></script><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style>
+
+        <!-- https://github.com/verlok/vanilla-lazyload -->
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/intersection-observer.js"></script>
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/lazyload.min.js"></script>
+
+        <!-- https://github.com/davidjbradshaw/iframe-resizer -->
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/iframeResizer.min.js"></script>
+
+        <!-- https://github.com/scratchblocks/scratchblocks/releases -->
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/scratchblocks.min.js"></script><style><![CDATA[.sb-label{font-family:Lucida Grande,Verdana,Arial,DejaVu Sans,sans-serif;font-weight:700;fill:#fff;font-size:10px;word-spacing:1px}.sb-obsolete{fill:#d42828}.sb-motion{fill:#4a6cd4}.sb-looks{fill:#8a55d7}.sb-sound{fill:#bb42c3}.sb-pen{fill:#0e9a6c}.sb-events{fill:#c88330}.sb-control{fill:#e1a91a}.sb-sensing{fill:#2ca5e2}.sb-operators{fill:#5cb712}.sb-variables{fill:#ee7d16}.sb-list{fill:#cc5b22}.sb-custom{fill:#632d99}.sb-custom-arg{fill:#5947b1}.sb-extension{fill:#4b4a60}.sb-grey{fill:#969696}.sb-bevel{filter:url(#bevelFilter)}.sb-input{filter:url(#inputBevelFilter)}.sb-input-number,.sb-input-number-dropdown,.sb-input-string{fill:#fff}.sb-literal-dropdown,.sb-literal-number,.sb-literal-number-dropdown,.sb-literal-string{font-weight:400;font-size:9px;word-spacing:0}.sb-literal-number,.sb-literal-number-dropdown,.sb-literal-string{fill:#000}.sb-darker{filter:url(#inputDarkFilter)}.sb-outline{stroke:#fff;stroke-opacity:.2;stroke-width:2;fill:none}.sb-comment,.sb-define-hat-cap{stroke:#632d99;stroke-width:1;fill:#8e2ec2}.sb-comment{fill:#ffffa5;stroke:#d0d1d2}.sb-comment-line{fill:#ffff80}.sb-comment-label{font-family:Helvetica,Arial,DejaVu Sans,sans-serif;font-weight:700;fill:#5c5d5f;word-spacing:0;font-size:12px}.sb-diff{fill:none;stroke:#000}.sb-diff-ins{stroke-width:2px}.sb-diff-del{stroke-width:3px}]]></style><style><![CDATA[.sb3-label{font:500 12pt Helvetica Neue,Helvetica,sans-serif;word-spacing:1pt}.sb3-literal-dropdown,.sb3-literal-number,.sb3-literal-number-dropdown,.sb3-literal-string{word-spacing:0}.sb3-diff{fill:none;stroke:#000}.sb3-diff-ins{stroke-width:2px}.sb3-diff-del{stroke-width:3px}svg .sb3-motion{fill:#4c97ff;stroke:#3373cc}svg .sb3-motion-alt{fill:#4280d7}svg .sb3-motion-dark{fill:#3373cc}svg .sb3-looks{fill:#96f;stroke:#774dcb}svg .sb3-looks-alt{fill:#855cd6}svg .sb3-looks-dark{fill:#774dcb}svg .sb3-sound{fill:#cf63cf;stroke:#bd42bd}svg .sb3-sound-alt{fill:#c94fc9}svg .sb3-sound-dark{fill:#bd42bd}svg .sb3-control{fill:#ffab19;stroke:#cf8b17}svg .sb3-control-alt{fill:#ec9c13}svg .sb3-control-dark{fill:#cf8b17}svg .sb3-events{fill:#ffbf00;stroke:#c90}svg .sb3-events-alt{fill:#e6ac00}svg .sb3-events-dark{fill:#c90}svg .sb3-sensing{fill:#5cb1d6;stroke:#2e8eb8}svg .sb3-sensing-alt{fill:#47a8d1}svg .sb3-sensing-dark{fill:#2e8eb8}svg .sb3-operators{fill:#59c059;stroke:#389438}svg .sb3-operators-alt{fill:#46b946}svg .sb3-operators-dark{fill:#389438}svg .sb3-variables{fill:#ff8c1a;stroke:#db6e00}svg .sb3-variables-alt{fill:#ff8000}svg .sb3-variables-dark{fill:#db6e00}svg .sb3-list{fill:#ff661a;stroke:#e64d00}svg .sb3-list-alt{fill:#f50}svg .sb3-list-dark{fill:#e64d00}svg .sb3-custom{fill:#ff6680;stroke:#f35}svg .sb3-custom-alt{fill:#ff4d6a}svg .sb3-custom-dark{fill:#f35}svg .sb3-extension{fill:#0fbd8c;stroke:#0b8e69}svg .sb3-extension-alt{fill:#0da57a}svg .sb3-extension-dark{fill:#0b8e69}svg .sb3-obsolete{fill:#ed4242;stroke:#ca2b2b}svg .sb3-obsolete-alt{fill:#db3333}svg .sb3-obsolete-dark{fill:#ca2b2b}svg .sb3-grey{fill:#bfbfbf;stroke:#909090}svg .sb3-grey-alt{fill:#b2b2b2}svg .sb3-grey-dark{fill:#909090}svg .sb3-label{fill:#fff}svg .sb3-input-color{stroke:#fff}svg .sb3-input-number,svg .sb3-input-string{fill:#fff}svg .sb3-literal-number,svg .sb3-literal-string{fill:#575e75}svg .sb3-custom-arg{fill:#ff6680;stroke:#f35}svg.scratchblocks-style-scratch3-high-contrast .sb3-motion{fill:#80b5ff;stroke:#3373cc}svg.scratchblocks-style-scratch3-high-contrast .sb3-motion-alt{fill:#b3d2ff}svg.scratchblocks-style-scratch3-high-contrast .sb3-motion-dark{fill:#3373cc}svg.scratchblocks-style-scratch3-high-contrast .sb3-looks{fill:#ccb3ff;stroke:#774dcb}svg.scratchblocks-style-scratch3-high-contrast .sb3-looks-alt{fill:#dcf}svg.scratchblocks-style-scratch3-high-contrast .sb3-looks-dark{fill:#774dcb}svg.scratchblocks-style-scratch3-high-contrast .sb3-sound{fill:#e19de1;stroke:#bd42bd}svg.scratchblocks-style-scratch3-high-contrast .sb3-sound-alt{fill:#ffb3ff}svg.scratchblocks-style-scratch3-high-contrast .sb3-sound-dark{fill:#bd42bd}svg.scratchblocks-style-scratch3-high-contrast .sb3-control{fill:#ffbe4c;stroke:#cf8b17}svg.scratchblocks-style-scratch3-high-contrast .sb3-control-alt{fill:#ffda99}svg.scratchblocks-style-scratch3-high-contrast .sb3-control-dark{fill:#cf8b17}svg.scratchblocks-style-scratch3-high-contrast .sb3-events{fill:#ffd966;stroke:#c90}svg.scratchblocks-style-scratch3-high-contrast .sb3-events-alt{fill:#ffecb3}svg.scratchblocks-style-scratch3-high-contrast .sb3-events-dark{fill:#c90}svg.scratchblocks-style-scratch3-high-contrast .sb3-sensing{fill:#85c4e0;stroke:#2e8eb8}svg.scratchblocks-style-scratch3-high-contrast .sb3-sensing-alt{fill:#aed8ea}svg.scratchblocks-style-scratch3-high-contrast .sb3-sensing-dark{fill:#2e8eb8}svg.scratchblocks-style-scratch3-high-contrast .sb3-operators{fill:#7ece7e;stroke:#389438}svg.scratchblocks-style-scratch3-high-contrast .sb3-operators-alt{fill:#b5e3b5}svg.scratchblocks-style-scratch3-high-contrast .sb3-operators-dark{fill:#389438}svg.scratchblocks-style-scratch3-high-contrast .sb3-variables{fill:#ffa54c;stroke:#db6e00}svg.scratchblocks-style-scratch3-high-contrast .sb3-variables-alt{fill:#fc9}svg.scratchblocks-style-scratch3-high-contrast .sb3-variables-dark{fill:#db6e00}svg.scratchblocks-style-scratch3-high-contrast .sb3-list{fill:#f96;stroke:#e64d00}svg.scratchblocks-style-scratch3-high-contrast .sb3-list-alt{fill:#ffcab0}svg.scratchblocks-style-scratch3-high-contrast .sb3-list-dark{fill:#e64d00}svg.scratchblocks-style-scratch3-high-contrast .sb3-custom{fill:#f9a;stroke:#e64d00}svg.scratchblocks-style-scratch3-high-contrast .sb3-custom-alt{fill:#ffccd5}svg.scratchblocks-style-scratch3-high-contrast .sb3-custom-dark{fill:#e64d00}svg.scratchblocks-style-scratch3-high-contrast .sb3-extension{fill:#13ecaf;stroke:#0b8e69}svg.scratchblocks-style-scratch3-high-contrast .sb3-extension-alt{fill:#75f0cd}svg.scratchblocks-style-scratch3-high-contrast .sb3-extension-dark{fill:#0b8e69}svg.scratchblocks-style-scratch3-high-contrast .sb3-obsolete{fill:#fc6666;stroke:#d32121}svg.scratchblocks-style-scratch3-high-contrast .sb3-obsolete-alt{fill:#fcb0b0}svg.scratchblocks-style-scratch3-high-contrast .sb3-obsolete-dark{fill:#d32121}svg.scratchblocks-style-scratch3-high-contrast .sb3-grey{fill:#bfbfbf;stroke:#959595}svg.scratchblocks-style-scratch3-high-contrast .sb3-grey-alt{fill:#b2b2b2}svg.scratchblocks-style-scratch3-high-contrast .sb3-grey-dark{fill:#959595}svg.scratchblocks-style-scratch3-high-contrast .sb3-label{fill:#000}svg.scratchblocks-style-scratch3-high-contrast .sb3-input-color{stroke:#fff}svg.scratchblocks-style-scratch3-high-contrast .sb3-input-number,svg.scratchblocks-style-scratch3-high-contrast .sb3-input-string{fill:#fff}svg.scratchblocks-style-scratch3-high-contrast .sb3-literal-number,svg.scratchblocks-style-scratch3-high-contrast .sb3-literal-string{fill:#000}svg.scratchblocks-style-scratch3-high-contrast .sb3-custom-arg{fill:#f9a;stroke:#e64d00}.sb3-comment{fill:#ffffa5;stroke:#d0d1d2;stroke-width:1}.sb3-comment-line{fill:#ffff80}.sb3-comment-label,.sb3-label.sb3-comment-label{font:400 12pt Helvetica Neue,Helvetica,sans-serif;fill:#000;word-spacing:0}]]></style>
+
+        <!-- https://mermaid-js.github.io/ -->
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/mermaid.min.js"></script>
+
+        <!-- https://github.com/twitter/twemoji -->
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/twemoji.min.js"></script>
+
+        
+
+        <link href="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/page.css" rel="stylesheet">
+        <link rel="stylesheet" href="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/css.css" media="all"><script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/jekyll-theme-cs50.js"></script>
+
+        <script>
+            window.CS50 = {
+                local: {"day":"numeric","hour":"numeric","minute":"numeric","month":"long","timeZoneName":"short","weekday":"long","year":"numeric"},
+                locale: "en",
+                tz: "America/New_York"
+            };
+        </script>
+
+        <title>Minesweeper - CS50's Introduction to Artificial Intelligence with Python</title>
+
+
+    <style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cs50.harvard.edu/ai/2024/assets/mathjax/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+</style></head>
+
+    <body class="">
+
+        
+        
+
+        <div class="container-fluid">
+
+            <div class="row">
+
+                <aside class="col-lg" style="height: 1354px; top: 0px;">
+ 
+                    <header><h1 data-id="cs50s-introduction-to-artificial-intelligence-with-python"><a href="https://cs50.harvard.edu/ai/2024/">CS50’s Introduction to Artificial Intelligence with Python</a></h1>
+
+<p>OpenCourseWare</p>
+
+<p><a class="pr-1 small" href="https://cs50.harvard.edu/donate">Donate<i aria-hidden="true" class="fas fa-external-link-alt ps-2"></i></a></p>
+
+<p><a href="https://brianyu.me/">Brian Yu</a><br>
+<a href="mailto:brian@cs.harvard.edu">brian@cs.harvard.edu</a></p>
+
+<p><a href="https://cs.harvard.edu/malan/">David J. Malan</a>
+<br>
+<a href="mailto:malan@harvard.edu">malan@harvard.edu</a>
+<br>
+<a class="mr-1" href="https://www.facebook.com/dmalan"><i aria-hidden="true" class="fa-brands fa-facebook-f" title="Facebook"></i><span class="sr-only">Facebook</span></a>
+<a class="mr-1" href="https://github.com/dmalan"><i aria-hidden="true" class="fa-brands fa-github" title="GitHub"></i><span class="sr-only">GitHub</span></a>
+<a class="mr-1" href="https://www.instagram.com/davidjmalan/"><i aria-hidden="true" class="fa-brands fa-instagram" title="Instagram"></i><span class="sr-only">Instagram</span></a>
+<a class="mr-1" href="https://www.linkedin.com/in/malan/"><i aria-hidden="true" class="fa-brands fa-linkedin" title="LinkedIn"></i><span class="sr-only">LinkedIn</span></a>
+<a class="mr-1" href="https://www.reddit.com/user/davidjmalan"><i aria-hidden="true" class="fa-brands fa-reddit-alien" title="Reddit"></i><span class="sr-only">Reddit</span></a>
+<a class="mr-1" href="https://www.threads.net/@davidjmalan"><i aria-hidden="true" class="fa-brands fa-threads" title="Threads"></i><span class="sr-only">Threads</span></a>
+<a class="mr-1" href="https://twitter.com/davidjmalan"><i aria-hidden="true" class="fa-brands fa-twitter" title="Twitter"></i><span class="sr-only">Twitter</span></a></p></header>
+
+                    
+
+                    <button aria-controls="nav" aria-expanded="false" class="btn btn-sm collapsed d-lg-none" data-bs-target="aside &gt; nav" data-bs-toggle="collapse">
+                        Menu
+                    </button>
+
+                    <nav class="collapse d-lg-block" id="nav"><hr>
+
+<ul class="fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/x/2023/ready/"><i class="fa-solid fa-duck me-2"></i>Ready Player 50</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/ai/2024/zoom/"><i class="fa-solid fa-video me-2"></i>Zoom Meetings</a></li>
+</ul>
+
+<!-- Tools -->
+<hr class="small">
+
+<ul class="small fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.ai/"><i class="fa-solid fa-duck pe-2 text-decoration-none"></i>CS50.ai</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.edx.org/ed"><i class="fa-solid fa-comment-question pe-2 text-decoration-none"></i>Ed Discussion</a> for Q&amp;A</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.dev/"><i class="fa-solid fa-laptop pe-2 text-decoration-none"></i>Visual Studio Code</a></li>
+</ul>
+
+<!-- Course Nav -->
+<hr>
+
+<ol start="0">
+  <li><a href="https://cs50.harvard.edu/ai/2024/weeks/0/">Search</a></li>
+  <li><a href="https://cs50.harvard.edu/ai/2024/weeks/1/">Knowledge</a></li>
+  <li><a href="https://cs50.harvard.edu/ai/2024/weeks/2/">Uncertainty</a></li>
+  <li><a href="https://cs50.harvard.edu/ai/2024/weeks/3/">Optimization</a></li>
+  <li><a href="https://cs50.harvard.edu/ai/2024/weeks/4/">Learning</a></li>
+  <li><a href="https://cs50.harvard.edu/ai/2024/weeks/5/">Neural Networks</a></li>
+  <li><a href="https://cs50.harvard.edu/ai/2024/weeks/6/">Language</a></li>
+</ol>
+
+<!-- Items that might usually appear in an academic syllabus -->
+<hr>
+
+<ul class="fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/ai/2024/honesty/">Academic Honesty</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/ai/2024/certificate/">CS50 Certificate</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/ai/2024/faqs/">FAQs</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.me/cs50ai">Gradebook</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/ai/2024/staff/">Staff</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span></li>
+</ul>
+
+<!-- Where to watch or take the class course -->
+<hr>
+
+<ul class="small fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://apps.apple.com/us/app/cs50/id1631064453">Apple TV</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.edx.org/ai">edX</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://play.google.com/store/apps/details?id=edu.harvard.cs50.googletv">Google TV</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://web.dce.harvard.edu/extension/csci/e/80">Harvard Extension School</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://web.dce.harvard.edu/summer/csci/s/80">Harvard Summer School</a></li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.youtube.com/playlist?list=PLhQjrBD2T381PopUTYtMSstgk-hsTGkVm">YouTube</a></li>
+</ul>
+
+<!-- Manual page, style guide, other docs -->
+
+<!-- Status Page -->
+<hr>
+
+<ul class="small fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.statuspage.io/">Status Page</a></li>
+</ul>
+
+<!-- Communities -->
+<hr>
+
+<ul class="fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/ai/2024/communities/"><strong>Communities</strong></a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.bsky.social/">Bluesky</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.clubhouse.com/club/cs50">Clubhouse</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://discord.gg/cs50">Discord</a> <span class="badge bg-light ms-1 py-1 rounded-pill text-dark">Q&amp;A</span></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.edx.org/ed">Ed</a> <span class="badge bg-light ms-1 py-1 rounded-pill text-dark">Q&amp;A</span></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.facebook.com/groups/cs50/">Facebook Group</a> <span class="badge bg-light ms-1 py-1 rounded-pill text-dark">Q&amp;A</span></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.facebook.com/cs50/">Facebook Page</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://github.com/cs50">GitHub</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://gitter.im/cs50/x">Gitter</a> <span class="badge bg-light ms-1 py-1 rounded-pill text-dark">Q&amp;A</span></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://instagram.com/cs50">Instagram</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.linkedin.com/groups/7437240/">LinkedIn Group</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.linkedin.com/school/CS50/">LinkedIn Page</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.medium.com/">Medium</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.quora.com/topic/CS50">Quora</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.reddit.com/r/cs50/">Reddit</a> <span class="badge bg-light ms-1 py-1 rounded-pill text-dark">Q&amp;A</span></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.edx.org/slack">Slack</a> <span class="badge bg-light ms-1 py-1 rounded-pill text-dark">Q&amp;A</span></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.snapchat.com/add/cs50">Snapchat</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://soundcloud.com/cs50">SoundCloud</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.stackexchange.com/">Stack Exchange</a> <span class="badge bg-light ms-1 py-1 rounded-pill text-dark">Q&amp;A</span></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://t.me/cs50x">Telegram</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.tiktok.com/@cs50">TikTok</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://www.threads.net/@cs50">Threads</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://twitter.com/cs50">Twitter Account</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://twitter.com/i/communities/1722308663522594923">Twitter Community</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="http://www.youtube.com/subscription_center?add_user=cs50tv">YouTube</a></li>
+</ul>
+
+<!-- Courses -->
+<hr>
+
+<ul class="fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/ai/2024/courses/"><strong>Courses</strong></a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/x">CS50x</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/ai">CS50 AI</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/business">CS50 Business</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="https://cs50.harvard.edu/cybersecurity">CS50 Cybersecurity</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="http://cs50.harvard.edu/law">CS50 for Lawyers</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="http://cs50.harvard.edu/games">CS50 Games</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="http://cs50.harvard.edu/python">CS50 Python</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="http://cs50.harvard.edu/r">CS50 R</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="http://cs50.harvard.edu/scratch">CS50 Scratch</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="http://cs50.harvard.edu/sql">CS50 SQL</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="http://cs50.harvard.edu/technology">CS50 Technology</a></li>
+  <li data-marker="*" class="small"><span class="fa-li"><i class="fas fa-square"></i></span><a href="http://cs50.harvard.edu/web">CS50 Web</a></li>
+</ul>
+
+<!-- Harvard Shop -->
+<hr>
+
+<p><a href="https://cs50.harvardshop.com/"><img src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/shop.png" alt="Harvard Shop"></a></p>
+
+<!-- Legal -->
+<hr>
+
+<p><a href="https://cs50.harvard.edu/ai/2024/license/" class="small"><i class="fab fa-creative-commons me-1"></i>License</a></p>
+
+<p class="small">2024-06-08 22:18:30</p></nav>
+
+                    <footer></footer>
+
+                </aside>
+
+                <main class="col-lg" style="margin-bottom: 722px; margin-top: 0px;">
+
+                    <a data-id="" id="minesweeper" style="top: 0px;"></a><h1><a data-id="" href="#minesweeper">Minesweeper</a></h1>
+
+<div class="alert alert-warning" data-alert="warning" role="alert"><p>The
+ latest version of Python you should use in this course is Python 3.11, 
+as newer versions of Python are not yet fully compatible with some 
+Python modules used in this course.</p></div>
+
+<p>Write an AI to play Minesweeper.</p>
+
+<p><img src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/game.png" alt="Minesweeper Game"></p>
+
+<a data-id="" id="when-to-do-it" style="top: 0px;"></a><h2><a data-id="" href="#when-to-do-it">When to Do It</a></h2>
+
+<p>By <a data-local="2024-12-31T23:59:00-05:00" href="https://time.cs50.io/20241231T235900-0500">Tuesday, December 31, 2024 at 9:59 PM MST</a></p>
+
+<a data-id="" id="how-to-get-help" style="top: 0px;"></a><h2><a data-id="" href="#how-to-get-help">How to Get Help</a></h2>
+
+<ol>
+  <li>Ask questions via <a href="https://cs50.edx.org/ed">Ed</a>!</li>
+  <li>Ask questions via any of CS50’s <a href="https://cs50.harvard.edu/ai/2024/communities/">communities</a>!</li>
+</ol>
+
+<a data-id="" id="background" style="top: 0px;"></a><h2><a data-id="" href="#background">Background</a></h2>
+
+<a data-id="" id="minesweeper-1" style="top: 0px;"></a><h3><a data-id="" href="#minesweeper-1">Minesweeper</a></h3>
+
+<p>Minesweeper is a puzzle game that consists of a grid of cells, where 
+some of the cells contain hidden “mines.” Clicking on a cell that 
+contains a mine detonates the mine, and causes the user to lose the 
+game. Clicking on a “safe” cell (i.e., a cell that does not contain a 
+mine) reveals a number that indicates how many neighboring cells – where
+ a neighbor is a cell that is one square to the left, right, up, down, 
+or diagonal from the given cell – contain a mine.</p>
+
+<p>In this 3x3 Minesweeper game, for example, the three <code class="language-plaintext highlighter-rouge">1</code> values indicate that each of those cells has one neighboring cell that is a mine. The four <code class="language-plaintext highlighter-rouge">0</code> values indicate that each of those cells has no neighboring mine.</p>
+
+<p><img src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/safe_cells.png" alt="Sample safe cell numbers"></p>
+
+<p>Given this information, a logical player could conclude that there 
+must be a mine in the lower-right cell and that there is no mine in the 
+upper-left cell, for only in that case would the numerical labels on 
+each of the other cells be accurate.</p>
+
+<p>The goal of the game is to flag (i.e., identify) each of the mines. 
+In many implementations of the game, including the one in this project, 
+the player can flag a mine by right-clicking on a cell (or two-finger 
+clicking, depending on the computer).</p>
+
+<a data-id="" id="propositional-logic" style="top: 0px;"></a><h3><a data-id="" href="#propositional-logic">Propositional Logic</a></h3>
+
+<p>Your goal in this project will be to build an AI that can play 
+Minesweeper. Recall that knowledge-based agents make decisions by 
+considering their knowledge base, and making inferences based on that 
+knowledge.</p>
+
+<p>One way we could represent an AI’s knowledge about a Minesweeper game
+ is by making each cell a propositional variable that is true if the 
+cell contains a mine, and false otherwise.</p>
+
+<p>What information does the AI have access to? Well, the AI would know 
+every time a safe cell is clicked on and would get to see the number for
+ that cell. Consider the following Minesweeper board, where the middle 
+cell has been revealed, and the other cells have been labeled with an 
+identifying letter for the sake of discussion.</p>
+
+<p><img src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/middle_safe.png" alt="Middle cell with labeled neighbors"></p>
+
+<p>What information do we have now? It appears we now know that one of 
+the eight neighboring cells is a mine. Therefore, we could write a 
+logical expression like the below to indicate that one of the 
+neighboring cells is a mine.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Or(A, B, C, D, E, F, G, H)
+</code></pre></div></div>
+
+<p>But we actually know more than what this expression says. The above 
+logical sentence expresses the idea that at least one of those eight 
+variables is true. But we can make a stronger statement than that: we 
+know that <strong><em>exactly</em></strong> one of the eight variables is true. This gives us a propositional logic sentence like the below.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Or(
+    And(A, Not(B), Not(C), Not(D), Not(E), Not(F), Not(G), Not(H)),
+    And(Not(A), B, Not(C), Not(D), Not(E), Not(F), Not(G), Not(H)),
+    And(Not(A), Not(B), C, Not(D), Not(E), Not(F), Not(G), Not(H)),
+    And(Not(A), Not(B), Not(C), D, Not(E), Not(F), Not(G), Not(H)),
+    And(Not(A), Not(B), Not(C), Not(D), E, Not(F), Not(G), Not(H)),
+    And(Not(A), Not(B), Not(C), Not(D), Not(E), F, Not(G), Not(H)),
+    And(Not(A), Not(B), Not(C), Not(D), Not(E), Not(F), G, Not(H)),
+    And(Not(A), Not(B), Not(C), Not(D), Not(E), Not(F), Not(G), H)
+)
+</code></pre></div></div>
+
+<p>That’s quite a complicated expression! And that’s just to express what it means for a cell to have a <code class="language-plaintext highlighter-rouge">1</code> in it. If a cell has a <code class="language-plaintext highlighter-rouge">2</code> or <code class="language-plaintext highlighter-rouge">3</code> or some other value, the expression could be even longer.</p>
+
+<p>Trying to perform model checking on this type of problem, too, would 
+quickly become intractable: on an 8x8 grid, the size Microsoft uses for 
+its Beginner level, we’d have 64 variables, and therefore 2^64 possible 
+models to check – far too many for a computer to compute in any 
+reasonable amount of time. We need a better representation of knowledge 
+for this problem.</p>
+
+<a data-id="" id="knowledge-representation" style="top: 0px;"></a><h3><a data-id="" href="#knowledge-representation">Knowledge Representation</a></h3>
+
+<p>Instead, we’ll represent each sentence of our AI’s knowledge like the below.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{A, B, C, D, E, F, G, H} = 1
+</code></pre></div></div>
+
+<p>Every logical sentence in this representation has two parts: a set of <code class="language-plaintext highlighter-rouge">cells</code> on the board that are involved in the sentence, and a number <code class="language-plaintext highlighter-rouge">count</code>,
+ representing the count of how many of those cells are mines. The above 
+logical sentence says that out of cells A, B, C, D, E, F, G, and H, 
+exactly 1 of them is a mine.</p>
+
+<p>Why is this a useful representation? In part, it lends itself well to certain types of inference. Consider the game below.</p>
+
+<p><img src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/infer_safe.png" alt="Minesweeper game where cells can be inferred as safe"></p>
+
+<p>Using the knowledge from the lower-left number, we could construct the sentence <code class="language-plaintext highlighter-rouge">{D, E, G} = 0</code>
+ to mean that out of cells D, E, and G, exactly 0 of them are mines. 
+Intuitively, we can infer from that sentence that all of the cells must 
+be safe. By extension, any time we have a sentence whose <code class="language-plaintext highlighter-rouge">count</code> is <code class="language-plaintext highlighter-rouge">0</code>, we know that all of that sentence’s <code class="language-plaintext highlighter-rouge">cells</code> must be safe.</p>
+
+<p>Similarly, consider the game below.</p>
+
+<p><img src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/infer_mines.png" alt="Minesweeper game where cells can be inferred as mines"></p>
+
+<p>Our AI would construct the sentence <code class="language-plaintext highlighter-rouge">{E, F, H} = 3</code>. Intuitively, we can infer that all of E, F, and H are mines. More generally, any time the number of <code class="language-plaintext highlighter-rouge">cells</code> is equal to the <code class="language-plaintext highlighter-rouge">count</code>, we know that all of that sentence’s <code class="language-plaintext highlighter-rouge">cells</code> must be mines.</p>
+
+<p>In general, we’ll only want our sentences to be about <code class="language-plaintext highlighter-rouge">cells</code>
+ that are not yet known to be either safe or mines. This means that, 
+once we know whether a cell is a mine or not, we can update our 
+sentences to simplify them and potentially draw new conclusions.</p>
+
+<p>For example, if our AI knew the sentence <code class="language-plaintext highlighter-rouge">{A, B, C} = 2</code>, we don’t yet have enough information to conclude anything. But if we were told that C were safe, we could remove <code class="language-plaintext highlighter-rouge">C</code> from the sentence altogether, leaving us with the sentence <code class="language-plaintext highlighter-rouge">{A, B} = 2</code> (which, incidentally, does let us draw some new conclusions.)</p>
+
+<p>Likewise, if our AI knew the sentence <code class="language-plaintext highlighter-rouge">{A, B, C} = 2</code>, and we were told that C is a mine, we could remove <code class="language-plaintext highlighter-rouge">C</code> from the sentence and decrease the value of <code class="language-plaintext highlighter-rouge">count</code> (since C was a mine that contributed to that count), giving us the sentence <code class="language-plaintext highlighter-rouge">{A, B} = 1</code>.
+ This is logical: if two out of A, B, and C are mines, and we know that C
+ is a mine, then it must be the case that out of A and B, exactly one of
+ them is a mine.</p>
+
+<p>If we’re being even more clever, there’s one final type of inference we can do.</p>
+
+<p><img src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/subset_inference.png" alt="Minesweeper game where inference by subsets is possible"></p>
+
+<p>Consider just the two sentences our AI would know based on the top 
+middle cell and the bottom middle cell. From the top middle cell, we 
+have <code class="language-plaintext highlighter-rouge">{A, B, C} = 1</code>. From the bottom middle cell, we have <code class="language-plaintext highlighter-rouge">{A, B, C, D, E} = 2</code>. Logically, we could then infer a new piece of knowledge, that <code class="language-plaintext highlighter-rouge">{D, E} = 1</code>.
+ After all, if two of A, B, C, D, and E are mines, and only one of A, B,
+ and C are mines, then it stands to reason that exactly one of D and E 
+must be the other mine.</p>
+
+<p>More generally, any time we have two sentences <code class="language-plaintext highlighter-rouge">set1 = count1</code> and <code class="language-plaintext highlighter-rouge">set2 = count2</code> where <code class="language-plaintext highlighter-rouge">set1</code> is a subset of <code class="language-plaintext highlighter-rouge">set2</code>, then we can construct the new sentence <code class="language-plaintext highlighter-rouge">set2 - set1 = count2 - count1</code>. Consider the example above to ensure you understand why that’s true.</p>
+
+<p>So using this method of representing knowledge, we can write an AI 
+agent that can gather knowledge about the Minesweeper board, and 
+hopefully select cells it knows to be safe!</p>
+
+<a data-id="" id="getting-started" style="top: 0px;"></a><h2><a data-id="" href="#getting-started">Getting Started</a></h2>
+
+<ul class="fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>Download the distribution code from <a href="https://cdn.cs50.net/ai/2023/x/projects/1/minesweeper.zip">https://cdn.cs50.net/ai/2023/x/projects/1/minesweeper.zip</a> and unzip it.</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>Once in the directory for the project, run <code class="language-plaintext highlighter-rouge">pip3 install -r requirements.txt</code> to install the required Python package (<code class="language-plaintext highlighter-rouge">pygame</code>) for this project if you don’t already have it installed.</li>
+</ul>
+
+<a data-id="" id="understanding" style="top: 0px;"></a><h2><a data-id="" href="#understanding">Understanding</a></h2>
+
+<p>There are two main files in this project: <code class="language-plaintext highlighter-rouge">runner.py</code> and <code class="language-plaintext highlighter-rouge">minesweeper.py</code>. <code class="language-plaintext highlighter-rouge">minesweeper.py</code> contains all of the logic the game itself and for the AI to play the game. <code class="language-plaintext highlighter-rouge">runner.py</code>
+ has been implemented for you, and contains all of the code to run the 
+graphical interface for the game. Once you’ve completed all the required
+ functions in <code class="language-plaintext highlighter-rouge">minesweeper.py</code>, you should be able to run <code class="language-plaintext highlighter-rouge">python runner.py</code> to play Minesweeper (or let your AI play for you)!</p>
+
+<p>Let’s open up <code class="language-plaintext highlighter-rouge">minesweeper.py</code> to understand what’s provided. There are three classes defined in this file, <code class="language-plaintext highlighter-rouge">Minesweeper</code>, which handles the gameplay; <code class="language-plaintext highlighter-rouge">Sentence</code>, which represents a logical sentence that contains both a set of <code class="language-plaintext highlighter-rouge">cells</code> and a <code class="language-plaintext highlighter-rouge">count</code>; and <code class="language-plaintext highlighter-rouge">MinesweeperAI</code>, which handles inferring which moves to make based on knowledge.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">Minesweeper</code> class has been entirely implemented for you. Notice that each cell is a pair <code class="language-plaintext highlighter-rouge">(i, j)</code> where <code class="language-plaintext highlighter-rouge">i</code> is the row number (ranging from <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">height - 1</code>) and <code class="language-plaintext highlighter-rouge">j</code> is the column number (ranging from <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">width - 1</code>).</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">Sentence</code> class will be used to represent logical sentences of the form described in the Background. Each sentence has a set of <code class="language-plaintext highlighter-rouge">cells</code> within it and a <code class="language-plaintext highlighter-rouge">count</code> of how many of those cells are mines. The class also contains functions <code class="language-plaintext highlighter-rouge">known_mines</code> and <code class="language-plaintext highlighter-rouge">known_safes</code> for determining if any of the cells in the sentence are known to be mines or known to be safe. It also contains functions <code class="language-plaintext highlighter-rouge">mark_mine</code> and <code class="language-plaintext highlighter-rouge">mark_safe</code> to update a sentence in response to new information about a cell.</p>
+
+<p>Finally, the <code class="language-plaintext highlighter-rouge">MinesweeperAI</code> class will implement an AI that can play Minesweeper. The AI class keeps track of a number of values. <code class="language-plaintext highlighter-rouge">self.moves_made</code> contains a set of all cells already clicked on, so the AI knows not to pick those again. <code class="language-plaintext highlighter-rouge">self.mines</code> contains a set of all cells known to be mines. <code class="language-plaintext highlighter-rouge">self.safes</code> contains a set of all cells known to be safe. And <code class="language-plaintext highlighter-rouge">self.knowledge</code> contains a list of all of the <code class="language-plaintext highlighter-rouge">Sentence</code>s that the AI knows to be true.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">mark_mine</code> function adds a cell to <code class="language-plaintext highlighter-rouge">self.mines</code>, so the AI knows that it is a mine. It also loops over all sentences in the AI’s <code class="language-plaintext highlighter-rouge">knowledge</code>
+ and informs each sentence that the cell is a mine, so that the sentence
+ can update itself accordingly if it contains information about that 
+mine. The <code class="language-plaintext highlighter-rouge">mark_safe</code> function does the same thing, but for safe cells instead.</p>
+
+<p>The remaining functions, <code class="language-plaintext highlighter-rouge">add_knowledge</code>, <code class="language-plaintext highlighter-rouge">make_safe_move</code>, and <code class="language-plaintext highlighter-rouge">make_random_move</code>, are left up to you!</p>
+
+<a data-id="" id="specification" style="top: 0px;"></a><h2><a data-id="" href="#specification">Specification</a></h2>
+
+<p>Complete the implementations of the <code class="language-plaintext highlighter-rouge">Sentence</code> class and the <code class="language-plaintext highlighter-rouge">MinesweeperAI</code> class in <code class="language-plaintext highlighter-rouge">minesweeper.py</code>.</p>
+
+<p>In the <code class="language-plaintext highlighter-rouge">Sentence</code> class, complete the implementations of <code class="language-plaintext highlighter-rouge">known_mines</code>, <code class="language-plaintext highlighter-rouge">known_safes</code>, <code class="language-plaintext highlighter-rouge">mark_mine</code>, and <code class="language-plaintext highlighter-rouge">mark_safe</code>.</p>
+
+<ul class="fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The <code class="language-plaintext highlighter-rouge">known_mines</code> function should return a set of all of the cells in <code class="language-plaintext highlighter-rouge">self.cells</code> that are known to be mines.</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The <code class="language-plaintext highlighter-rouge">known_safes</code> function should return a set of all the cells in <code class="language-plaintext highlighter-rouge">self.cells</code> that are known to be safe.</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The <code class="language-plaintext highlighter-rouge">mark_mine</code> function should first check to see if <code class="language-plaintext highlighter-rouge">cell</code> is one of the cells included in the sentence.
+    <ul class="fa-ul">
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>If <code class="language-plaintext highlighter-rouge">cell</code> is in the sentence, the function should update the sentence so that <code class="language-plaintext highlighter-rouge">cell</code> is no longer in the sentence, but still represents a logically correct sentence given that <code class="language-plaintext highlighter-rouge">cell</code> is known to be a mine.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>If <code class="language-plaintext highlighter-rouge">cell</code> is not in the sentence, then no action is necessary.</li>
+    </ul>
+  </li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The <code class="language-plaintext highlighter-rouge">mark_safe</code> function should first check to see if <code class="language-plaintext highlighter-rouge">cell</code> is one of the cells included in the sentence.
+    <ul class="fa-ul">
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>If <code class="language-plaintext highlighter-rouge">cell</code> is in the sentence, the function should update the sentence so that <code class="language-plaintext highlighter-rouge">cell</code> is no longer in the sentence, but still represents a logically correct sentence given that <code class="language-plaintext highlighter-rouge">cell</code> is known to be safe.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>If <code class="language-plaintext highlighter-rouge">cell</code> is not in the sentence, then no action is necessary.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>In the <code class="language-plaintext highlighter-rouge">MinesweeperAI</code> class, complete the implementations of <code class="language-plaintext highlighter-rouge">add_knowledge</code>, <code class="language-plaintext highlighter-rouge">make_safe_move</code>, and <code class="language-plaintext highlighter-rouge">make_random_move</code>.</p>
+
+<ul class="fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><code class="language-plaintext highlighter-rouge">add_knowledge</code> should accept a <code class="language-plaintext highlighter-rouge">cell</code> (represented as a tuple <code class="language-plaintext highlighter-rouge">(i, j)</code>) and its corresponding <code class="language-plaintext highlighter-rouge">count</code>, and update <code class="language-plaintext highlighter-rouge">self.mines</code>, <code class="language-plaintext highlighter-rouge">self.safes</code>, <code class="language-plaintext highlighter-rouge">self.moves_made</code>, and <code class="language-plaintext highlighter-rouge">self.knowledge</code> with any new information that the AI can infer, given that <code class="language-plaintext highlighter-rouge">cell</code> is known to be a safe cell with <code class="language-plaintext highlighter-rouge">count</code> mines neighboring it.
+    <ul class="fa-ul">
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The function should mark the <code class="language-plaintext highlighter-rouge">cell</code> as one of the moves made in the game.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The function should mark the <code class="language-plaintext highlighter-rouge">cell</code> as a safe cell, updating any sentences that contain the <code class="language-plaintext highlighter-rouge">cell</code> as well.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The function should add a new sentence to the AI’s knowledge base, based on the value of <code class="language-plaintext highlighter-rouge">cell</code> and <code class="language-plaintext highlighter-rouge">count</code>, to indicate that <code class="language-plaintext highlighter-rouge">count</code> of the <code class="language-plaintext highlighter-rouge">cell</code>’s neighbors are mines. Be sure to only include cells whose state is still undetermined in the sentence.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>If, based on any of the sentences in <code class="language-plaintext highlighter-rouge">self.knowledge</code>, new cells can be marked as safe or as mines, then the function should do so.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>If, based on any of the sentences in <code class="language-plaintext highlighter-rouge">self.knowledge</code>,
+ new sentences can be inferred (using the subset method described in the
+ Background), then those sentences should be added to the knowledge base
+ as well.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>Note
+ that any time that you make any change to your AI’s knowledge, it may 
+be possible to draw new inferences that weren’t possible before. Be sure
+ that those new inferences are added to the knowledge base if it is 
+possible to do so.</li>
+    </ul>
+  </li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><code class="language-plaintext highlighter-rouge">make_safe_move</code> should return a move <code class="language-plaintext highlighter-rouge">(i, j)</code> that is known to be safe.
+    <ul class="fa-ul">
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The move returned must be known to be safe, and not a move already made.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>If no safe move can be guaranteed, the function should return <code class="language-plaintext highlighter-rouge">None</code>.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The function should not modify <code class="language-plaintext highlighter-rouge">self.moves_made</code>, <code class="language-plaintext highlighter-rouge">self.mines</code>, <code class="language-plaintext highlighter-rouge">self.safes</code>, or <code class="language-plaintext highlighter-rouge">self.knowledge</code>.</li>
+    </ul>
+  </li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><code class="language-plaintext highlighter-rouge">make_random_move</code> should return a random move <code class="language-plaintext highlighter-rouge">(i, j)</code>.
+    <ul class="fa-ul">
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>This
+ function will be called if a safe move is not possible: if the AI 
+doesn’t know where to move, it will choose to move randomly instead.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The move must not be a move that has already been made.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>The move must not be a move that is known to be a mine.</li>
+      <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>If no such moves are possible, the function should return <code class="language-plaintext highlighter-rouge">None</code>.</li>
+    </ul>
+  </li>
+</ul>
+
+<a data-id="" id="hints" style="top: 0px;"></a><h2><a data-id="" href="#hints">Hints</a></h2>
+
+<ul class="fa-ul">
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>Be
+ sure you’ve thoroughly read the Background section to understand how 
+knowledge is represented in this AI and how the AI can make inferences.</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>If feeling less comfortable with object-oriented programming, you may find <a href="https://docs.python.org/3/tutorial/classes.html">Python’s documentation on classes</a> helpful.</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>You can find some common <code class="language-plaintext highlighter-rouge">set</code> operations in <a href="https://docs.python.org/3/library/stdtypes.html#set">Python’s documentation on sets</a>.</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>When implementing <code class="language-plaintext highlighter-rouge">known_mines</code> and <code class="language-plaintext highlighter-rouge">known_safes</code> in the <code class="language-plaintext highlighter-rouge">Sentence</code>
+ class, consider: under what circumstances do you know for sure that a 
+sentence’s cells are safe? Under what circumstances do you know for sure
+ that a sentence’s cells are mines?</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span><code class="language-plaintext highlighter-rouge">add_knowledge</code>
+ does quite a lot of work, and will likely be the longest function you 
+write for this project by far. It will likely be helpful to implement 
+this function’s behavior one step at a time.</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>You’re
+ welcome to add new methods to any of the classes if you would like, but
+ you should not modify any of the existing functions’ definitions or 
+arguments.</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>When
+ you run your AI (as by clicking “AI Move”), note that it will not 
+always win! There will be some cases where the AI must guess, because it
+ lacks sufficient information to make a safe move. This is to be 
+expected. <code class="language-plaintext highlighter-rouge">runner.py</code> will print whether the AI is making a move it believes to be safe or whether it is making a random move.</li>
+  <li data-marker="*"><span class="fa-li"><i class="fas fa-square"></i></span>Be careful not to modify a set while iterating over it. Doing so may result in errors!</li>
+</ul>
+
+<a data-id="" id="testing" style="top: 0px;"></a><h2><a data-id="" href="#testing">Testing</a></h2>
+
+<p>If you’d like, you can execute the below (after <a href="https://cs50.readthedocs.io/projects/check50/en/latest/index.html">setting up <code class="language-plaintext highlighter-rouge">check50</code></a>
+ on your system) to evaluate the correctness of your code. This isn’t 
+obligatory; you can simply submit following the steps at the end of this
+ specification, and these same tests will run on our server. Either way,
+ be sure to compile and test it yourself as well!</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>check50 ai50/projects/2024/x/minesweeper
+</code></pre></div></div>
+
+<p>Execute the below to evaluate the style of your code using <code class="language-plaintext highlighter-rouge">style50</code>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>style50 minesweeper.py
+</code></pre></div></div>
+
+<div class="alert alert-warning" data-alert="warning" role="alert"><p>Remember that <strong>you may not import any modules</strong> (other than those in the Python standard library) <strong>other than those explicitly authorized herein</strong>. Doing so will not only prevent <code class="language-plaintext highlighter-rouge">check50</code> from running, but will also prevent <code class="language-plaintext highlighter-rouge">submit50</code> from scoring your assignment, since it uses <code class="language-plaintext highlighter-rouge">check50</code>.
+ If that happens, you’ve likely imported something disallowed or 
+otherwise modified the distribution code in an unauthorized manner, per 
+the specification. There are certainly tools out there that trivialize 
+some of these projects, but that’s not the goal here; you’re learning 
+things at a lower level. If we don’t say here that you can use them, you
+ can’t use them.</p></div>
+
+<a data-id="" id="how-to-submit" style="top: 0px;"></a><h2><a data-id="" href="#how-to-submit">How to Submit</a></h2>
+
+<div class="alert alert-primary" data-alert="primary" role="alert"><p>Beginning <a data-local="2024-01-01T00:00:00-05:00" href="https://time.cs50.io/20240101T000000-0500" class="alert-link">Sunday, December 31, 2023 at 10:00 PM MST</a>, the course has transitioned to a new submission platform. If you had not completed CS50 AI prior to that time, <strong>you must join the new course pursuant to Step 1, below</strong>,
+ and also must resubmit all of your past projects using the new 
+submission slugs to import their scores. We apologize for the 
+inconvenience, but hope you feel that access to <code class="language-plaintext highlighter-rouge">check50</code>, which is new for 2024, is a worthwhile trade-off for it, here!</p></div>
+
+<ol>
+  <li>Visit <a href="https://submit.cs50.io/invites/d03c31aef1984c29b5e7b268c3a87b7b">this link</a>, log in with your GitHub account, and click <strong>Authorize cs50</strong>. Then, check the box indicating that you’d like to grant course staff access to your submissions, and click <strong>Join course</strong>.</li>
+  <li><a href="https://git-scm.com/downloads">Install Git</a> and, optionally, <a href="https://cs50.readthedocs.io/submit50/">install <code class="language-plaintext highlighter-rouge">submit50</code></a>.</li>
+  <li>If you’ve installed <code class="language-plaintext highlighter-rouge">submit50</code>, execute
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>submit50 ai50/projects/2024/x/minesweeper
+</code></pre></div>    </div>
+    <p>Otherwise, using Git, push your work to <code class="language-plaintext highlighter-rouge">https://github.com/me50/USERNAME.git</code>, where <code class="language-plaintext highlighter-rouge">USERNAME</code> is your GitHub username, on a branch called <code class="language-plaintext highlighter-rouge">ai50/projects/2024/x/minesweeper</code>.</p>
+  </li>
+</ol>
+
+<div class="alert alert-danger" data-alert="danger" role="alert"><p>If you submit your code directly using Git, rather than <code class="language-plaintext highlighter-rouge">submit50</code>, <strong>do not</strong>
+ include files or folders other than those you are actually instructed 
+to modify in the specification above. (That is to say, don’t upload your
+ entire directory!)</p></div>
+
+<p>Work should be graded within five minutes. You can then go to <a href="https://cs50.me/cs50ai">https://cs50.me/cs50ai</a> to view your current progress!</p>
+
+
+                </main>
+
+            </div>
+
+        </div>
+
+        
+ 
+        <script src="Minesweeper%20-%20CS50's%20Introduction%20to%20Artificial%20Intelligence%20with%20Python_files/page.js"></script>
+
+    
+
+
+</body></html>
