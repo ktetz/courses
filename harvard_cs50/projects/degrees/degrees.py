@@ -55,17 +55,22 @@ def load_data(directory):
 def main():
     if len(sys.argv) > 2:
         sys.exit("Usage: python degrees.py [directory]")
-    directory = sys.argv[1] if len(sys.argv) == 2 else "large"
+    directory = sys.argv[1] if len(sys.argv) == 2 else "small"
 
     # Load data from files into memory
     print("Loading data...")
     load_data(directory)
     print("Data loaded.")
 
-    source = person_id_for_name(input("Name: "))
+    #source = person_id_for_name(input("Name: "))
+    source = 102
+
     if source is None:
         sys.exit("Person not found.")
-    target = person_id_for_name(input("Name: "))
+    
+    #target = person_id_for_name(input("Name: "))
+    target = 129
+    
     if target is None:
         sys.exit("Person not found.")
 
@@ -91,9 +96,33 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
+    if source is None or target is None:
+        return None
 
-    # TODO
-    raise NotImplementedError
+    frontier = QueueFrontier()
+    frontier.add(Node(state=source, parent=None, action=None))
+
+    explored = set()
+
+    while not frontier.empty():
+        node = frontier.remove()
+
+        if node.state == target:
+            path = []
+            while node.parent is not None:
+                path.append((node.action, node.state))
+                node = node.parent
+            path.reverse()
+            return path
+
+        explored.add(node.state)
+
+        for movie_id, person_id in neighbors_for_person(node.state):
+            if person_id not in explored and not frontier.contains_state(person_id):
+                child = Node(state=person_id, parent=node, action=movie_id)
+                frontier.add(child)
+
+    return None
 
 
 def person_id_for_name(name):
